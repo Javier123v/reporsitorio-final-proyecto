@@ -1,0 +1,58 @@
+import random
+
+# Lista de palabras
+palabras = ["tecnologia", "futuro", "programacion", "educacion", "sociedad"]
+
+def seleccionar_palabra():
+    """Selecciona una palabra al azar de la lista de palabras."""
+    return random.choice(palabras)
+
+def mostrar_progreso(palabra, letras_adivinadas):
+    """Muestra el progreso del jugador en adivinar la palabra."""
+    progreso = ""
+    for letra in palabra:
+        if letra in letras_adivinadas:
+            progreso += letra + " "
+        else:
+            progreso += "_ "
+    return progreso.strip()
+
+def verificar_letra(letra, palabra, letras_adivinadas, intentos_restantes):
+    """Verifica si la letra adivinada es correcta y actualiza el estado del juego."""
+    if letra in palabra and letra not in letras_adivinadas:
+        letras_adivinadas.append(letra)
+        return True
+    elif letra in letras_adivinadas:
+        print("Ya has adivinado esa letra.")
+        return False
+    else:
+        intentos_restantes -= 1
+        print(f"Letra incorrecta. Te quedan {intentos_restantes} intentos.")
+        return False
+
+def jugar_ahorcado():
+    """Función principal para jugar al ahorcado."""
+    palabra = seleccionar_palabra()
+    letras_adivinadas = []
+    intentos_restantes = 6
+    juego_terminado = False
+
+    print("¡Bienvenido al juego del ahorcado!")
+    print("Adivina la palabra:")
+    while not juego_terminado and intentos_restantes > 0:
+        print(mostrar_progreso(palabra, letras_adivinadas))
+        letra = input("Ingresa una letra: ").lower()
+        if len(letra) == 1 and letra.isalpha():
+            verificar_letra(letra, palabra, letras_adivinadas, intentos_restantes)
+        else:
+            print("Por favor, ingresa una letra válida.")
+        
+        if "_" not in mostrar_progreso(palabra, letras_adivinadas):
+            juego_terminado = True
+            print(f"¡Felicidades! Adivinaste la palabra '{palabra}'.")
+
+    if intentos_restantes == 0:
+        print(f"Lo siento, has perdido. La palabra era '{palabra}'.")
+
+if __name__ == "__main__":
+    jugar_ahorcado()
